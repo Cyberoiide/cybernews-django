@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CyberNews</title>
+  <link href="{% static 'css/halfmoon.min.css' %}" rel="stylesheet">
+</head>
+<body class="page-wrapper with-navbar">
+  <nav class="navbar">
+    <div class="container">
+      <a href="/" class="navbar-brand">🛡️ CyberNews</a>
+    </div>
+  </nav>
+
+  <div class="container mt-20">
+    <h1 class="mb-20">Latest Cybersecurity News</h1>
+
+    {% for article in articles %}
+      <div class="card mb-15">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'article_detail' article.id %}" class="text-decoration-none">
+              {{ article.title }}
+            </a>
+          </h5>
+          <h6 class="card-subtitle text-muted mb-10">
+            {{ article.source.name }} — {{ article.created_at|date:"M d, Y" }}
+          </h6>
+          <p class="card-text">
+            {{ article.summary|truncatewords:40|default:"No summary available." }}
+          </p>
+          <a href="{% url 'article_detail' article.id %}" class="btn btn-primary btn-sm">Read more</a>
+        </div>
+      </div>
+    {% empty %}
+      <p>No articles available.</p>
+    {% endfor %}
+  </div>
+
+  <script src="{% static 'js/halfmoon.min.js' %}"></script>
+</body>
+</html>

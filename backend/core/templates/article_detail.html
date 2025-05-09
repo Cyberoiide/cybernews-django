@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ article.title }} | CyberNews</title>
+    <link href="{% static 'css/halfmoon.min.css' %}" rel="stylesheet" />
+  </head>
+  <body class="page-wrapper with-navbar">
+    <nav class="navbar">
+      <div class="container">
+        <a href="/" class="navbar-brand">🛡️ CyberNews</a>
+      </div>
+    </nav>
+
+    <div class="container mt-20">
+      <a href="/" class="btn btn-secondary btn-sm mb-15">← Back</a>
+
+      <div class="card mb-20">
+        <div class="card-body">
+          <h1 class="card-title">{{ article.title }}</h1>
+          <h6 class="card-subtitle text-muted mb-15">
+            {{ article.source.name }} — {{ article.created_at|date:"F d, Y" }} —
+            Score: {{ article.score }}
+          </h6>
+          <div class="mb-20">{{ article.content|linebreaks }}</div>
+          <a href="{{ article.url }}" class="btn btn-primary" target="_blank"
+            >Read on original site</a
+          >
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">💬 Comments</h5>
+
+          {% if comments %} {% for comment in comments %}
+          <div class="border rounded p-10 mb-10">
+            <strong>{{ comment.user.username }}</strong>
+            <span class="text-muted ml-5"
+              >{{ comment.created_at|date:"Y-m-d H:i" }}</span
+            >
+            <p class="mt-5 mb-0">{{ comment.text }}</p>
+          </div>
+          {% endfor %} {% else %}
+          <p class="text-muted">No comments yet. Be the first to comment!</p>
+          {% endif %}
+
+          <hr class="mt-20 mb-20" />
+
+          <form method="post" class="mt-10 mb-20">
+            {% csrf_token %} {% if user.is_authenticated %}
+            <div class="input-group">
+              {{ form.text }}
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
+            </div>
+            {% else %}
+            <input
+              class="form-control"
+              placeholder="You must be logged in to comment..."
+              disabled
+            />
+            <div class="input-group-append">
+              <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+            </div>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'js/halfmoon.min.js' %}"></script>
+  </body>
+</html>

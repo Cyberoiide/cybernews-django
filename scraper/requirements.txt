@@ -1,0 +1,4 @@
+scrapy
+trafilatura
+requests
+python-dotenv
